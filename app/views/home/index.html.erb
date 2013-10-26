@@ -1,4 +1,34 @@
-<h3>Home</h3>
-<% @users.each do |user| %>
-  <p>User: <%=link_to user.name, user %></p>
-<% end %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer 24/7</title>
+    <meta name="description" content="Show the significance of prayer on Austin for 24/7." />
+    <%= stylesheet_link_tag "application", :media => "all" %>
+    <%= javascript_include_tag "http://html5shiv.googlecode.com/svn/trunk/html5.js" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <section class="map">
+      <header class="map__header group">
+        <div class="container">
+          <div class="logo">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+          </div>
+          <ul class="membership list--layout group">
+            <li>
+              <a href="/">Login</a>
+            </li>
+            <li>
+              <a href="/">Register</a>
+            </li>
+          </ul>
+        </div>
+      </header>
+    </section>
+    <section class="content">
+
+    </section>
+    <%= javascript_include_tag "application" %>
+  </body>
+</html>
