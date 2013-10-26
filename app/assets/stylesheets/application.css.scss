@@ -2,6 +2,12 @@
 *= require_self
 */
 
+*, *:after, *:before {
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
+}
+
 html,
 body {
   margin: 0;
@@ -22,8 +28,14 @@ body {
 
 .container {
   max-width: 1140px;
-  padding-left: 2em;
-  padding-right: 2em;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1em;
+  padding-right: 1em;
+  @media only screen and (min-width : 480px) {
+    padding-left: 2em;
+    padding-right: 2em;
+  }
 }
 
 .list--layout {
@@ -59,4 +71,71 @@ body {
       }
     }
   }
+}
+
+.content__piece {
+  padding: 2em 0;
+}
+
+@media only screen and (min-width : 720px) {
+  .content__piece--calendar {
+    float: left;
+    padding-right: 1em;
+    width: percentage(2 / 3);
+  }
+  .content__piece--posts {
+    float: right;
+    padding-left: 1em;
+    width: percentage(1 / 3);
+  }
+}
+
+/*
+Calendar
+*/
+
+.calendar {
+  $offset: 0;
+
+  background-color: rgba(0, 0, 0, 0);
+  margin: -$offset;
+
+  .day {
+    float: left;
+    padding: $offset;
+    width: percentage(1 / 7);
+    &:first-child .calendar__day,
+    &:last-child .calendar__day {
+      background-color: rgba(0, 0, 120, .15);
+    }
+  }
+}
+
+.calendar__day {
+  background-color: rgba(0, 0, 120, .35);
+  height: 100px;
+  position: relative;
+
+  .progress,
+  .bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .progress {
+    background-color: rgba(0, 0, 0, .5);
+
+  }
+}
+
+/*
+Posts
+*/
+
+.posts {
+  background-color: rgba(0, 0, 0, .1);
+  height: 800px;
 }

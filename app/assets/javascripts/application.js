@@ -14,3 +14,16 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+jQuery(document).ready(function($) {
+
+  var $calendarDays = $('.calendar__day');
+  $calendarDays.each(function() {
+    var slot = parseInt($(this).data('slot')),
+        slotPercentage = 100 - ((slot / 24) * 100),
+        $bg = $(this).find('.bg');
+
+    $bg.empty().append($('<div class="progress" style="top: ' + slotPercentage + '%;" />'));
+  });
+
+});

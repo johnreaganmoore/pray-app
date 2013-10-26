@@ -27,7 +27,29 @@
       </header>
     </section>
     <section class="content">
+      <div class="container group">
+        <div class="content__piece content__piece--calendar">
+          <section class="calendar">
+            <% @calendar.each do |week| %>
+            <ul class="week list--layout group">
+              <% week.each do |day| %>
+              <li class="day">
+                <div class="calendar__day" data-day="<%= day[:day] %>" data-slot="<%= day[:slots] %>">
+                  <header class="header"></header>
+                  <div class="bg"></div>
+                </div>
+              </li>
+              <% end %>
+            </ul>
+            <% end %>
+          </section>
+        </div>
+        <div class="content__piece content__piece--posts">
+          <section class="posts">
 
+          </section>
+        </div>
+      </div>
     </section>
     <%= javascript_include_tag "application" %>
   </body>
