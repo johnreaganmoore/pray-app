@@ -4,27 +4,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prayer 24/7</title>
     <meta name="description" content="Show the significance of prayer on Austin for 24/7." />
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
     <%= stylesheet_link_tag "application", :media => "all" %>
+
+    <script type="text/javascript" src="//use.typekit.net/ahb8fbd.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <%= javascript_include_tag "http://html5shiv.googlecode.com/svn/trunk/html5.js" %>
+
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <section class="map">
-      <header class="map__header group">
-        <div class="container">
-          <div class="logo">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
-          </div>
-          <ul class="membership list--layout group">
-            <li>
-              <a href="/">Login</a>
-            </li>
-            <li>
-              <a href="/">Register</a>
-            </li>
-          </ul>
+    <header class="map__header group">
+      <div class="container">
+        <div class="logo">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
         </div>
-      </header>
+        <ul class="membership list--layout group">
+          <li>
+            <a href="/">Login</a>
+          </li>
+          <li>
+            <a href="/">Register</a>
+          </li>
+        </ul>
+      </div>
+    </header>
+    <section class="map"></section>
+    <section class="tagline">
+      <div class="container">
+        <h2>
+          In the month of October, <%= pluralize(@users_praying, 'person', 'people') %> in the city of Austin<br />will collectively be praying around the clock.
+        </h2>
+      </div>
     </section>
     <section class="content">
       <div class="container group">
@@ -35,7 +47,6 @@
               <% week.each do |day| %>
               <li class="day">
                 <div class="calendar__day" data-day="<%= day[:day] %>" data-slot="<%= day[:slots] %>">
-                  <header class="header"></header>
                   <div class="bg"></div>
                 </div>
               </li>
@@ -43,6 +54,15 @@
             </ul>
             <% end %>
           </section>
+          <% if user_signed_in? %>
+          <section class="add-slot">
+            <%= form_for @slot, :url => url_for(:controller => 'slots', :action => 'create') do |slot_form| %>
+              <%= slot_form.collection_select(:church_id, Church.all, :id, :name) %>
+              <%= slot_form.select(:hour, options_for_select((1..24).to_a)) %>
+              <%= button_tag "Submit", :name => "Commit", :type => "submit" %>
+            <% end %>
+          </section>
+          <% end %>
         </div>
         <div class="content__piece content__piece--posts">
           <section class="posts">
@@ -51,6 +71,7 @@
         </div>
       </div>
     </section>
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
     <%= javascript_include_tag "application" %>
   </body>
 </html>

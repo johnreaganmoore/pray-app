@@ -26,4 +26,32 @@ jQuery(document).ready(function($) {
     $bg.empty().append($('<div class="progress" style="top: ' + slotPercentage + '%;" />'));
   });
 
+  var map = L.map($('.map')[0], {
+    zoomControl: false,
+    attributionControl: false,
+    center: [30.264998, -97.740083],
+    zoom: 10,
+    minZoom: 10,
+    dragging: false,
+    scrollWheelZoom: false
+  });
+
+  L.tileLayer('http://b.sm.mapstack.stamen.com/((toner-lines,$fff[hsl-saturation])[overlay],streets-and-labels[@60])/{z}/{x}/{y}.png', {
+    attribution: false,
+    maxZoom: 18
+  }).addTo(map);
+
+  $.getJSON( "/churches", function( churches ) {
+    if (churches) {
+      for (var i = 0; i < churches.length; i++) {
+        var church = churches[i];
+        L.circle([church.lat, church.lng], church.slots * 200, {
+          stroke: false,
+          fillColor: '#0aa',
+          fillOpacity: 0.125
+        }).addTo(map);
+      }
+    }
+  });
+
 });

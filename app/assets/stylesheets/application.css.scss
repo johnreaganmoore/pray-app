@@ -45,18 +45,18 @@ body {
   padding-left: 0;
 }
 
-.map {
-  background-color: #555;
-  height: 520px;
+.map__header {
+  padding: 2em 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+
   a {
-    color: white;
+    color: black;
     text-decoration: none;
   }
-}
-
-.map__header {
-  background-color: rgba(255, 255, 255, .1);
-  padding: 2em 0;
 
   .logo {
     float: left;
@@ -73,8 +73,27 @@ body {
   }
 }
 
-.content__piece {
-  padding: 2em 0;
+.map {
+  background-color: #eee;
+  height: 520px;
+  cursor: default;
+}
+
+.tagline,
+.content {
+  margin: 3.5em 0;
+}
+
+.tagline h2 {
+  margin: 0;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+
+  font-family: "adelle", sans-serif;
+  font-weight: 300;
+  font-size: 1.75em;
+  text-align: center;
 }
 
 @media only screen and (min-width : 720px) {
@@ -95,10 +114,40 @@ Calendar
 */
 
 .calendar {
-  $offset: 0;
+  $offset: .125em;
 
   background-color: rgba(0, 0, 0, 0);
   margin: -$offset;
+
+  h1 {
+    margin: 0;
+    margin-bottom: 1em;
+    position: relative;
+
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    font-weight: 400;
+    color: rgb(85, 85, 85);
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 25%;
+      height: 1px;
+      background-color: rgb(35, 35, 35);
+    }
+
+    &:before {
+      left: 0;
+    }
+
+    &:after {
+      right: 0;
+    }
+  }
 
   .day {
     float: left;
@@ -106,14 +155,14 @@ Calendar
     width: percentage(1 / 7);
     &:first-child .calendar__day,
     &:last-child .calendar__day {
-      background-color: rgba(0, 0, 120, .15);
+      background-color: rgba(20, 120, 120, .1);
     }
   }
 }
 
 .calendar__day {
-  background-color: rgba(0, 0, 120, .35);
-  height: 100px;
+  background-color: rgba(20, 120, 120, .3);
+  height: 130px;
   position: relative;
 
   .progress,
@@ -126,8 +175,7 @@ Calendar
   }
 
   .progress {
-    background-color: rgba(0, 0, 0, .5);
-
+    background-color: rgba(85, 85, 85, 1);
   }
 }
 
