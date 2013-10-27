@@ -70,7 +70,7 @@
           <hr />
 
           <div class="custom-select">
-          <%= select_tag(:hour, options_for_select((0..23).to_a)) %>
+          <%= select_tag(:hour,  options_for_select([['12a', 0], ['1a', 1], ['2a', 2], ['3a', 3], ['4a', 4], ['5a', 5], ['6a', 6], ['7a', 7], ['8a', 8], ['9a', 9], ['10a', 10], ['11a', 11], ['12p', 12], ['1p', 13], ['2p', 14], ['3p', 15], ['4p', 16], ['5p', 17], ['6p', 18], ['7p', 19], ['8p', 20], ['9p', 21], ['10p', 22], ['11p', 23]])) %>
           </div>
 
           <%= button_tag "Register", :name => "Commit", :type => "submit" %>
@@ -140,16 +140,18 @@
             </ul>
             <% end %>
           </section>
-          <section class="tagline">
-            <div class="container">
-              <h2>Sign up for a prayer slot</h2>
-            </div>
+          <section>
+            <h3 class="join-movement">Join the movement!<br />Sign up for a prayer slot.</h3>
           </section>
           <% if user_signed_in? %>
           <section class="add-slot">
             <%= form_for @slot, :url => url_for(:controller => 'slots', :action => 'create') do |slot_form| %>
-              <%= slot_form.collection_select(:church_id, Church.all, :id, :name) %>
-              <%= slot_form.select(:hour, options_for_select((0..23).to_a)) %>
+              <div class="custom-select">
+                <%= slot_form.collection_select(:church_id, Church.all, :id, :name) %>
+              </div>
+              <div class="custom-select">
+                <%= slot_form.select(:hour, options_for_select([['12a', 0], ['1a', 1], ['2a', 2], ['3a', 3], ['4a', 4], ['5a', 5], ['6a', 6], ['7a', 7], ['8a', 8], ['9a', 9], ['10a', 10], ['11a', 11], ['12p', 12], ['1p', 13], ['2p', 14], ['3p', 15], ['4p', 16], ['5p', 17], ['6p', 18], ['7p', 19], ['8p', 20], ['9p', 21], ['10p', 22], ['11p', 23]])) %>
+              </div>
               <%= button_tag "Submit", :name => "Commit", :type => "submit" %>
             <% end %>
           </section>
@@ -167,7 +169,7 @@
                 <% end %>
               </div>
               <div class="actions">
-                <%= f.submit 'Save' %>
+                <%= f.submit 'Post' %>
               </div>
             <% end %>
 
@@ -182,11 +184,9 @@
 
     <div id="templates">
        <script class="post", type="text/template", style="display:none">
-        <div class="post">
-          <div class="post__container">
-            <p class="post__content">{{content}}</p>
-            <p class="post__name">-  {{user_id}}</p>
-          </div>
+        <div class="post__container group">
+          <p class="post__content">{{content}}</p>
+          <p class="post__name">- {{user.name}}</p>
         </div>
        </script>
      </div>
@@ -202,8 +202,7 @@
           el: '.post__stream'
         });
 
-
-        var postsData = <%= raw @posts.to_json %>
+        var postsData = <%= raw @posts.to_json(:include => :user) %>
 
         posts.add(postsData);
     </script>

@@ -102,5 +102,20 @@ jQuery(document).ready(function($) {
     }
   });
 
+  $.getJSON( "/posts", function( posts ) {
+    if (posts) {
+      for (var i = 0; i < posts.length; i++) {
+        var post = posts[i];
+        if (post.lat && post.lng) {
+          L.circle([post.lat, post.lng], 2200, {
+            stroke: false,
+            fillColor: '#a00',
+            fillOpacity: 0.125
+          }).addTo(map);
+        }
+      }
+    }
+  });
+
 });
 

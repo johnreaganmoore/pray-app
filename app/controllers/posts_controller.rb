@@ -1,7 +1,18 @@
 class PostsController < ApplicationController
 
+  def index
+    posts = Post.all
+
+    render json: posts
+  end
+
   def create
     @post = Post.new(post_params)
+
+    coords = Geocoder.coordinates(request.remote_ip)
+
+    @post.lat = coords[0].to_f
+    @post.lng = coords[1].to_f
 
     respond_to do |format|
       if @post.save

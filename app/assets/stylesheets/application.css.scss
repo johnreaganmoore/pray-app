@@ -73,6 +73,22 @@ body {
   text-align: center;
 }
 
+.custom-select {
+  position: relative;
+  &:after {
+    content: '';
+    background: url('/assets/select-arrow.png') no-repeat center center;
+    position: absolute;
+    top: 50%;
+    margin-top: -4px;
+    right: 18px;
+    width: 11px;
+    height: 9px;
+    pointer-events: none;
+    opacity: .4;
+  }
+}
+
 .modal__form {
   font-size: 16px;
   width: 420px;
@@ -102,21 +118,6 @@ body {
     display: inline-block;
     width: auto;
     padding: 0;
-  }
-  .custom-select {
-    position: relative;
-    &:after {
-      content: '';
-      background: url('/assets/select-arrow.png') no-repeat center center;
-      position: absolute;
-      top: 50%;
-      margin-top: -4px;
-      right: 18px;
-      width: 11px;
-      height: 9px;
-      pointer-events: none;
-      opacity: .4;
-    }
   }
   select {
     -webkit-appearance: none;
@@ -194,7 +195,7 @@ body {
 
 .map {
   background-color: #eee;
-  height: 560px;
+  height: 580px;
   cursor: default;
 }
 
@@ -205,13 +206,25 @@ body {
 
 .tagline h2 {
   margin: 0;
-  width: 70%;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
 
   font-family: "adelle", sans-serif;
   font-weight: 300;
   font-size: 1.75em;
+  text-align: center;
+}
+
+.join-movement {
+  margin: 2em 0;
+  margin-bottom: 24px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #555;
+  letter-spacing: 0px;
+  text-transform: none;
   text-align: center;
 }
 
@@ -326,19 +339,88 @@ Calendar
   }
 }
 
+.add-slot {
+
+  display: block;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+
+  input,
+  select,
+  button {
+    border: 0;
+    background-color: transparent;
+    color: #333;
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 8px 16px;
+    margin: 0;
+    margin-top: 12px;
+  }
+
+  input,
+  select {
+    border-radius: 0;
+    border: 1px solid rgba(0, 0, 0, .25);
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, .15);
+  }
+
+  select {
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+
+  button {
+    -webkit-appearance: none;
+    font-size: 20px;
+    width: 100%;
+    display: block;
+    text-align: center;
+    background-color: rgba(20, 120, 120, .5);
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  button[type="submit"] {
+    margin-top: 24px;
+  }
+
+}
+
 /*
 Posts
 */
 
 .posts {
-  background-color: rgba(0, 0, 0, .1);
-  height: 800px;
-  padding: 8px;
+
+  .post {
+    margin-top: 2em;
+    padding-top: 2em;
+    border-top: 1px solid rgba(0, 0, 0, .05);
+  }
+
+  [name="commit"] {
+    -webkit-appearance: none;
+    font-size: 16px;
+    text-align: center;
+    border: 0;
+    background-color: rgba(20, 120, 120, .5);
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+    text-transform: uppercase;
+    padding: 6px 0 4px 0;
+    height: auto;
+  }
 
   #post_content {
     width: 100%;
-    height: 120px;
-    border: 3px solid #cccccc;
+    padding: 10px;
+    height: 100px;
+    border: 2px solid #cccccc;
 
     :focus {
       border: thin solid rgba(20, 120, 120, 0.5);
@@ -346,20 +428,15 @@ Posts
   }
 
   .post__container {
-    background-color: rgba(0, 0, 0, 0.1);
-    color: purple;
-    width: 100%;
-    padding: 8px;
-    margin-top: 8px;
-    border-radius: 3px;
   }
 
   .post__content {
-
+    margin: 0;
   } 
 
   .post__name {
-
+    float: right;
+    font-style: italic;
   } 
 
 }
