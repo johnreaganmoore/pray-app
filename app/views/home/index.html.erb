@@ -45,8 +45,9 @@
           </section>
         </div>
         <div class="content__piece content__piece--posts">
+
           <section class="posts">
-            <div class="post__stream"></div>
+
             <%= form_for(Post.new) do |f| %>
               <div class="field">
                 <%= f.label :content %>
@@ -57,6 +58,8 @@
                 <%= f.submit 'Save' %>
               </div>
             <% end %>
+
+          <div class="post__stream"></div>
 
           </section>
         </div>
@@ -82,7 +85,7 @@
 
         var postsView = new PostStreamView({
           collection: posts,
-          el: '.posts'
+          el: '.post__stream'
         });
 
 
