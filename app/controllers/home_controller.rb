@@ -5,22 +5,22 @@ class HomeController < ApplicationController
 
     @calendar = [
       [
-        { month: "June", day: 29, church: "Temple Church", slots: 24 },
-        { month: "June", day: 30, church: "Temple Church", slots: 24 },
-        { month: "July", day: 1, church: "Temple Church", slots: 21 },
-        { month: "July", day: 2, church: "Temple Church", slots: 19 },
-        { month: "July", day: 3, church: "Temple Church", slots: 16 },
-        { month: "July", day: 4, church: "Temple Church", slots: 24 },
-        { month: "July", day: 5, church: "Temple Church", slots: 9 }
+        { month: "June", day: 29, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "June", day: 30, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 1, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 2, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 3, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 4, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 5, church: "Temple Church", slots: Random.new.rand(1..24) }
       ],
       [
-        { month: "July", day: 6, church: "Temple Church", slots: 24 },
-        { month: "July", day: 7, church: "Temple Church", slots: 19 },
-        { month: "July", day: 8, church: "Temple Church", slots: 3 },
-        { month: "July", day: 9, church: "Temple Church", slots: 24 },
-        { month: "July", day: 10, church: "Temple Church", slots: 12 },
-        { month: "July", day: 11, church: "Temple Church", slots: 1 },
-        { month: "July", day: 12, church: "Temple Church", slots: 24 }
+        { month: "July", day: 6, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 7, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 8, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 9, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 10, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 11, church: "Temple Church", slots: Random.new.rand(1..24) },
+        { month: "July", day: 12, church: "Temple Church", slots: Random.new.rand(1..24) }
       ],
       [
         { month: "July", day: 13, church: "Temple Church", slots: Random.new.rand(1..24) },
@@ -53,6 +53,16 @@ class HomeController < ApplicationController
 
     @posts = Post.all
     @users = User.all
+
+    @slots = Slot.all
+
+    @users_praying = 0
+
+    unless @slots.empty?
+      @users_praying = @slots.map { |slot| slot.user.id }.uniq!.size
+    end
+
+    @slot = Slot.new
 
     render :layout => false
 

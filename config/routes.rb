@@ -3,4 +3,6 @@ PrayApp::Application.routes.draw do
   devise_for :users, :controllers => {:registrations => "registrations"}
   resources :users
   resources :posts
+  resources :slots, :only => [:create]
+  resources :churches, :only => [:index]
 end
