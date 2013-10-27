@@ -101,6 +101,11 @@
             </ul>
             <% end %>
           </section>
+          <section class="tagline">
+            <div class="container">
+              <h2>Sign up for a prayer slot</h2>
+            </div>
+          </section>
           <% if user_signed_in? %>
           <section class="add-slot">
             <%= form_for @slot, :url => url_for(:controller => 'slots', :action => 'create') do |slot_form| %>
@@ -115,17 +120,16 @@
 
           <section class="posts">
 
-            <% if user_signed_in? %>
             <%= form_for(Post.new) do |f| %>
               <div class="field">
-                <%= f.label :content %>
-                <%= f.text_field :content %>
+                <%= f.text_area :content, placeholder: "How does/can prayer effect your life?" %>
+                <% if user_signed_in? %>
                 <%= f.hidden_field :user_id, value: current_user.id %>
+                <% end %>
               </div>
               <div class="actions">
                 <%= f.submit 'Save' %>
               </div>
-            <% end %>
             <% end %>
 
             <div class="post__stream"></div>
@@ -141,8 +145,8 @@
        <script class="post", type="text/template", style="display:none">
         <div class="post">
           <div class="post__container">
-            <p>{{content}}</p>
-            <p>{{user_id}}</p>
+            <p class="post__content">{{content}}</p>
+            <p class="post__name">-  {{user_id}}</p>
           </div>
         </div>
        </script>
@@ -161,15 +165,6 @@
 
 
         var postsData = <%= raw @posts.to_json %>
-
-
-        // [
-        //   {
-        //     content: "This is some post content",
-        //     name: "John Reagan"
-        //   }
-        // ]
-
 
         posts.add(postsData);
     </script>

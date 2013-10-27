@@ -39,9 +39,9 @@ class HomeController < ApplicationController
     @slots = Slot.all
 
     @users_praying = 0
-    unless @slots.empty?
-      @users_praying = @slots.map { |slot| slot.user.id unless slot.user.nil? }.uniq!.size
-    end
+    # unless @slots.empty?
+    #   @users_praying = @slots.map { |slot| slot.user.id unless slot.user.nil? }.uniq!.size
+    # end
 
     @slot = Slot.new
 
