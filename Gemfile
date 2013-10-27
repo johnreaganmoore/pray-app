@@ -10,7 +10,7 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'devise'
 gem 'figaro'
-gem 'unicorn'
+# gem 'unicorn'
 gem 'geocoder'
 
 group :development do

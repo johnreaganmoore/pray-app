@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prayer 24/7</title>
+    <title>Endless Prayer</title>
     <meta name="description" content="Show the significance of prayer on Austin for 24/7." />
 
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
@@ -16,54 +16,89 @@
   </head>
   <body>
     <div class="modal modal--register" style="display: none;">
-      <%= form_for User.new, :url => user_registration_path do |user_form| %>
-        <%= user_form.text_field :name, :placeholder => "Name" %>
-        <%= user_form.email_field :email, :placeholder => "Email" %>
-        <%= user_form.password_field :password, :placeholder => "Password" %>
+      <div class="modal__form">
+        <h2>Register to Pray</h2>
+        <%= form_for User.new, :url => user_registration_path do |user_form| %>
+          <%= user_form.text_field :name, :placeholder => "Name" %>
+          <%= user_form.email_field :email, :placeholder => "Email" %>
+          <%= user_form.password_field :password, :placeholder => "Password" %>
 
-        <div>
+          <hr />
+
+          <h4>Do you have a church in mind?</h4>
+
+          <% if @churches.empty? %>
+          <%= radio_button_tag(:church_type, "new", :checked => "checked") %>
+          <%= label_tag(:church_type_new, "New Church") %>
+
+          <hr />
+
+          <div class="new-church">
+          <%= text_field_tag :church_name, nil, :placeholder => "Church Name" %>
+          <%= text_field_tag :church_address, nil, :placeholder => "Church Address" %>
+          <div class="custom-select">
+          <%= select_tag(:church_date, options_for_select((1..31).to_a)) %>
+          </div>
+          </div>
+          <% else %>
+          <div>
           <%= radio_button_tag(:church_type, "existing", :checked => "checked") %>
-          <%= label_tag(:church_type_existing, "Existing") %>
+          <%= label_tag(:church_type_existing, "Existing Church") %>
+          </div>
+          <div>
           <%= radio_button_tag(:church_type, "new") %>
-          <%= label_tag(:church_type_new, "New") %>
-        </div>
+          <%= label_tag(:church_type_new, "New Church") %>
+          </div>
 
-        <div class="existing-church">
-        <%= select_tag(:church_id, options_from_collection_for_select(Church.all, :id, :name)) %>
-        </div>
+          <hr />
 
-        <div class="new-church" style="display: none;">
-        <%= text_field_tag :church_name, nil, :placeholder => "Church Name" %>
-        <%= text_field_tag :church_address, nil, :placeholder => "Church Address" %>
-        <%= select_tag(:church_date, options_for_select((1..31).to_a)) %>
-        </div>
+          <div class="existing-church">
+            <div class="custom-select">
+              <%= select_tag(:church_id, options_from_collection_for_select(@churches, :id, :name)) %>
+            </div>
+          </div>
 
-        <div>
+          <div class="new-church" style="display: none;">
+          <%= text_field_tag :church_name, nil, :placeholder => "Church Name" %>
+          <%= text_field_tag :church_address, nil, :placeholder => "Church Address" %>
+          <div class="custom-select">
+            <%= select_tag(:church_date, options_for_select((1..31).to_a)) %>
+          </div>
+          </div>
+          <% end %>
+
+          <hr />
+
+          <div class="custom-select">
           <%= select_tag(:hour, options_for_select((0..23).to_a)) %>
-        </div>
+          </div>
 
-        <%= button_tag "Submit", :name => "Commit", :type => "submit" %>
-      <% end %>
+          <%= button_tag "Register", :name => "Commit", :type => "submit" %>
+        <% end %>
+      </div>
     </div>
     <div class="modal modal--login" style="display: none;">
-      <%= form_for("user", :url => user_session_path) do |f| %>
-        <%= f.text_field :email %>
-        <%= f.password_field :password %>
-        <%= f.check_box :remember_me %>
-        <%= f.label :remember_me %>
-        <%= f.submit 'Sign in' %>
-        <%= link_to "Forgot your password?", new_password_path('user') %>
-      <% end %>
+      <div class="modal__form">
+        <h2>Login</h2>
+        <%= form_for("user", :url => user_session_path) do |f| %>
+          <%= f.text_field :email, :placeholder => "Email" %>
+          <%= f.password_field :password, :placeholder => "Password" %>
+          <hr />
+          <%= button_tag "Login", :name => "Commit", :type => "submit" %>
+        <% end %>
+      </div>
     </div>
     <header class="map__header group">
       <div class="container">
         <div class="logo">
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+          <img src="/assets/logo-small.png" />
         </div>
         <ul class="membership list--layout group">
           <% if user_signed_in? %>
           <li>
-            Hello, <%= current_user.name %>
+            <%= current_user.name %>
+          </li>
+          <li>
             <%= link_to "Logout", destroy_user_session_path, :method => :delete %>
           </li>
           <% else %>
@@ -81,7 +116,7 @@
     <section class="tagline">
       <div class="container">
         <h2>
-          In the month of October, <%= pluralize(@users_praying, 'person', 'people') %> in the city of Austin<br />will collectively be praying around the clock.
+          In an effort for endless prayer, <%= pluralize(@users_praying, 'person', 'people') %> in Austin will combine to pray around the clock in the month of <%= DateTime.now.strftime("%B") %>.
         </h2>
       </div>
     </section>
@@ -89,12 +124,16 @@
       <div class="container group">
         <div class="content__piece content__piece--calendar">
           <section class="calendar">
-            <% @calendar.each do |week| %>
+            <% @calendar.each_with_index do |week, wIndex| %>
             <ul class="week list--layout group">
-              <% week.each do |day| %>
-              <li class="day">
-                <div class="calendar__day" data-day="<%= day[:day] %>" data-slot="<%= day[:slots] %>">
+              <% week.each_with_index do |day, dIndex| %>
+              <li class="day<% if day[:featureMonth] %> feature-month<% end %>" data-day="<%= day[:day] %>" data-slot="<%= day[:slots] %>">
+                <div class="calendar__day">
                   <div class="bg"></div>
+                  <% if (wIndex == 0 and dIndex == 0) or day[:day] == "1" %>
+                  <div class="month"><%= day[:month] %></div>
+                  <% end %>
+                  <div class="number"><%= day[:day] %></div>
                 </div>
               </li>
               <% end %>
