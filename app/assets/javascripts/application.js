@@ -13,7 +13,12 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
+//= require underscore
+//= require backbone
+//= require util
+//= require post
+//= require post-view
+//= require post-stream-view
 
 jQuery(document).ready(function($) {
 
@@ -27,3 +32,4 @@ jQuery(document).ready(function($) {
   });
 
 });
+

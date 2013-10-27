@@ -46,11 +46,60 @@
         </div>
         <div class="content__piece content__piece--posts">
           <section class="posts">
+            <div class="post__stream"></div>
+            <%= form_for(Post.new) do |f| %>
+              <div class="field">
+                <%= f.label :content %>
+                <%= f.text_field :content %>
+                <%= f.hidden_field :user_id, value: current_user.id %>
+              </div>
+              <div class="actions">
+                <%= f.submit 'Save' %>
+              </div>
+            <% end %>
 
           </section>
         </div>
       </div>
     </section>
+
+    <div id="templates">
+       <script class="post", type="text/template", style="display:none">
+        <div class="post">
+          <div class="post__container">
+            <p>{{content}}</p>
+            <p>{{user_id}}</p>
+          </div>
+        </div>
+       </script>
+     </div>
+
     <%= javascript_include_tag "application" %>
+
+    <script type="text/javascript">
+
+        var posts = new PostCollection();
+
+        var postsView = new PostStreamView({
+          collection: posts,
+          el: '.posts'
+        });
+
+
+        var postsData = <%= raw @posts.to_json %>
+
+
+        // [
+        //   {
+        //     content: "This is some post content",
+        //     name: "John Reagan"
+        //   }
+        // ]
+
+
+        posts.add(postsData);
+    </script>
+
+
   </body>
 </html>

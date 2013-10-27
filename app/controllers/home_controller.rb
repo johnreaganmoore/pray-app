@@ -51,6 +51,10 @@ class HomeController < ApplicationController
       ]
     ]
 
+    @posts = Post.all
+    @users = User.all
+
     render :layout => false
+
   end
 end
