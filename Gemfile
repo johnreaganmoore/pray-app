@@ -11,6 +11,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'devise'
 gem 'figaro'
 gem 'unicorn'
+gem 'geocoder'
 
 group :development do
   gem 'better_errors'

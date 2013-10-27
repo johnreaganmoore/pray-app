@@ -38,6 +38,16 @@ body {
   }
 }
 
+.modal {
+  background: rgba(0, 0, 0, .9);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1200;
+}
+
 .list--layout {
   list-style-type: none;
   margin-top: 0;
@@ -161,7 +171,7 @@ Calendar
 }
 
 .calendar__day {
-  background-color: rgba(20, 120, 120, .3);
+  background-color: rgba(20, 120, 120, .1);
   height: 130px;
   position: relative;
 
@@ -175,7 +185,7 @@ Calendar
   }
 
   .progress {
-    background-color: rgba(85, 85, 85, 1);
+    background-color: rgba(20, 120, 120, .5);
   }
 }
 

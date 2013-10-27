@@ -31,6 +31,23 @@ jQuery(document).ready(function($) {
     $bg.empty().append($('<div class="progress" style="top: ' + slotPercentage + '%;" />'));
   });
 
+  $('.register-url').on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $('.modal--register').show();
+  });
+
+  $('.login-url').on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $('.modal--login').show();
+  });
+
+  $('[name="church_type"]').on("change", function(e) {
+    $(this).closest('form').find("[class$='-church']").hide();
+    $(this).closest('form').find('.' + $(this).val() + '-church').show();
+  });
+
   var map = L.map($('.map')[0], {
     zoomControl: false,
     attributionControl: false,

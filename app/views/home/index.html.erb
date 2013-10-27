@@ -15,18 +15,65 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
+    <div class="modal modal--register" style="display: none;">
+      <%= form_for User.new, :url => user_registration_path do |user_form| %>
+        <%= user_form.text_field :name, :placeholder => "Name" %>
+        <%= user_form.email_field :email, :placeholder => "Email" %>
+        <%= user_form.password_field :password, :placeholder => "Password" %>
+
+        <div>
+          <%= radio_button_tag(:church_type, "existing", :checked => "checked") %>
+          <%= label_tag(:church_type_existing, "Existing") %>
+          <%= radio_button_tag(:church_type, "new") %>
+          <%= label_tag(:church_type_new, "New") %>
+        </div>
+
+        <div class="existing-church">
+        <%= select_tag(:church_id, options_from_collection_for_select(Church.all, :id, :name)) %>
+        </div>
+
+        <div class="new-church" style="display: none;">
+        <%= text_field_tag :church_name, nil, :placeholder => "Church Name" %>
+        <%= text_field_tag :church_address, nil, :placeholder => "Church Address" %>
+        <%= select_tag(:church_date, options_for_select((1..31).to_a)) %>
+        </div>
+
+        <div>
+          <%= select_tag(:hour, options_for_select((0..23).to_a)) %>
+        </div>
+
+        <%= button_tag "Submit", :name => "Commit", :type => "submit" %>
+      <% end %>
+    </div>
+    <div class="modal modal--login" style="display: none;">
+      <%= form_for("user", :url => user_session_path) do |f| %>
+        <%= f.text_field :email %>
+        <%= f.password_field :password %>
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me %>
+        <%= f.submit 'Sign in' %>
+        <%= link_to "Forgot your password?", new_password_path('user') %>
+      <% end %>
+    </div>
     <header class="map__header group">
       <div class="container">
         <div class="logo">
           <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
         </div>
         <ul class="membership list--layout group">
+          <% if user_signed_in? %>
           <li>
-            <a href="/">Login</a>
+            Hello, <%= current_user.name %>
+            <%= link_to "Logout", destroy_user_session_path, :method => :delete %>
+          </li>
+          <% else %>
+          <li>
+            <a class="login-url" href="/users/sign_in">Login</a>
           </li>
           <li>
-            <a href="/">Register</a>
+            <a class="register-url" href="/users/sign_out">Register</a>
           </li>
+          <% end %>
         </ul>
       </div>
     </header>
@@ -58,7 +105,7 @@
           <section class="add-slot">
             <%= form_for @slot, :url => url_for(:controller => 'slots', :action => 'create') do |slot_form| %>
               <%= slot_form.collection_select(:church_id, Church.all, :id, :name) %>
-              <%= slot_form.select(:hour, options_for_select((1..24).to_a)) %>
+              <%= slot_form.select(:hour, options_for_select((0..23).to_a)) %>
               <%= button_tag "Submit", :name => "Commit", :type => "submit" %>
             <% end %>
           </section>
@@ -68,6 +115,7 @@
 
           <section class="posts">
 
+            <% if user_signed_in? %>
             <%= form_for(Post.new) do |f| %>
               <div class="field">
                 <%= f.label :content %>
@@ -78,13 +126,15 @@
                 <%= f.submit 'Save' %>
               </div>
             <% end %>
+            <% end %>
 
-          <div class="post__stream"></div>
+            <div class="post__stream"></div>
 
           </section>
         </div>
       </div>
     </section>
+
     <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
 
     <div id="templates">

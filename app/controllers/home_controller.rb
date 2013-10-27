@@ -1,65 +1,46 @@
 class HomeController < ApplicationController
   def index
-    @date = Time.now
-    @week_count = (0.5 + (@date.at_end_of_month.day + @date.at_beginning_of_month.wday).to_f / 7.0).round
+    @date = DateTime.now
 
-    @calendar = [
-      [
-        { month: "June", day: 29, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "June", day: 30, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 1, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 2, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 3, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 4, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 5, church: "Temple Church", slots: Random.new.rand(1..24) }
-      ],
-      [
-        { month: "July", day: 6, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 7, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 8, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 9, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 10, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 11, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 12, church: "Temple Church", slots: Random.new.rand(1..24) }
-      ],
-      [
-        { month: "July", day: 13, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 14, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 15, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 16, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 17, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 18, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 19, church: "Temple Church", slots: Random.new.rand(1..24) }
-      ],
-      [
-        { month: "July", day: 20, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 21, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 22, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 23, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 24, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 25, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 26, church: "Temple Church", slots: Random.new.rand(1..24) }
-      ],
-      [
-        { month: "July", day: 27, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 28, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 29, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 30, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "July", day: 31, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "August", day: 1, church: "Temple Church", slots: Random.new.rand(1..24) },
-        { month: "August", day: 2, church: "Temple Church", slots: Random.new.rand(1..24) }
-      ]
-    ]
+    weeks = (0.5 + (@date.at_end_of_month.day + @date.at_beginning_of_month.wday).to_f / 7.0).round
+
+    daysToStart = @date.beginning_of_month.days_to_week_start(:sunday)
+
+    startDateTime = @date.beginning_of_month.advance(:days => -daysToStart)
+    endDateTime = startDateTime.advance(:days => ((7 * weeks)-1))
+
+    @calendar = []
+    week = []
+
+    (startDateTime..endDateTime).each_with_index do |date, index|
+      if (index % 7) == 0
+        week = []
+      end
+
+      day = {
+        month: date.strftime("%B"),
+        day: date.strftime("%-d"),
+        slots: 0
+      }
+      church = Church.find_by_date(date.strftime("%-d"))
+      if church
+        day[:church] = church.name
+        day[:slots] = church.slots.map { |slot| slot.hour }.uniq.size
+      end
+
+      week << day
+      if (index % 7) == 6
+        @calendar << week
+      end
+    end
 
     @posts = Post.all
     @users = User.all
-
     @slots = Slot.all
 
     @users_praying = 0
-
     unless @slots.empty?
-      @users_praying = @slots.map { |slot| slot.user.id }.uniq!.size
+      @users_praying = @slots.map { |slot| slot.user.id unless slot.user.nil? }.uniq!.size
     end
 
     @slot = Slot.new
